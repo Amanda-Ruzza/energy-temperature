@@ -24,3 +24,11 @@ resource "google_storage_bucket" "data_flow_bucket" {
     enabled = true
   }
 }
+
+output "raw_data_bucket_name" {
+  value = google_storage_bucket.raw_data_bucket.name
+}
+
+output "data_flow_bucket_name" {
+  value = google_storage_bucket.data_flow_bucket
+}
