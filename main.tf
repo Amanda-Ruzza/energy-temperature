@@ -10,3 +10,10 @@ resource "random_integer" "random" {
 resource "random_id" "bucket_prefix" {
   byte_length = 4
 }
+
+module "buckets" {
+    source = "./buckets"
+    bucket_prefix = random_id.bucket_prefix.hex
+    default_label = local.default_label
+    
+}
