@@ -19,5 +19,5 @@ module "buckets" {
 }
 
 module "bigquery" {
-    source = "./bigquery"
+  source = "./bigquery"
 }

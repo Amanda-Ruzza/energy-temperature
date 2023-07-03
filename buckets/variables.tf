@@ -1,4 +1,4 @@
-#---------variables/buckets.tf-----------
+#---------buckets/variables.tf-----------
 
 variable "bucket_prefix" {
     description = "Prefix for unique bucket names"
