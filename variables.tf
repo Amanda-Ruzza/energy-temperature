@@ -8,5 +8,5 @@ variable "gcp_region" {
 variable "gcp_project" {
   type        = string
   description = "Project to use for this config"
-  default = "cr-lab-aruzza-2706230354"
+  default     = "cr-lab-aruzza-2706230354"
 }
