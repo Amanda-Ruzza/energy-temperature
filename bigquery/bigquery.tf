@@ -57,3 +57,7 @@ resource "google_bigquery_table" "temperatures" {
 EOF
 
 }
+
+output "temperature_energy_dataset_friendly_name" {
+  value = google_bigquery_dataset.temperature_energy_dataset.friendly_name
+}
