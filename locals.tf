@@ -3,6 +3,6 @@
 #create a default label for all the resources here
 locals {
   default_label = {
-    project = "DataEngineering"
+    project = "data-engineering"
   }
 }

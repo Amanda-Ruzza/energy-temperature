@@ -7,7 +7,7 @@ resource "google_storage_bucket" "raw_data_bucket" {
   location      = "US"
   storage_class = "STANDARD"
 
-  # labels = var.default_label
+  labels = var.default_label
   versioning {
     enabled = true
   }
@@ -19,7 +19,7 @@ resource "google_storage_bucket" "data_flow_bucket" {
   location      = "US"
   storage_class = "STANDARD"
 
-  # labels = var.default_label
+  labels = var.default_label
   versioning {
     enabled = true
   }
