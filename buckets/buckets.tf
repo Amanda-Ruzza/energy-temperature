@@ -30,5 +30,5 @@ output "raw_data_bucket_name" {
 }
 
 output "data_flow_bucket_name" {
-  value = google_storage_bucket.data_flow_bucket
+  value = google_storage_bucket.data_flow_bucket.name
 }

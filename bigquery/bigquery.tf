@@ -7,19 +7,14 @@ resource "google_bigquery_dataset" "temperature_energy_dataset" {
     friendly_name = "temperature_energy_dataset"
     description = "Dataset for the Temperature-Energy Project"
     location = "US"
-
-    labels = {
-        project = "data-engineering"
-    } #change this to the locals default_label later
+    labels = var.default_label
+    
 }
 
 resource "google_bigquery_table" "temperatures" {
   dataset_id = google_bigquery_dataset.temperature_energy_dataset.dataset_id
   table_id   = "temperatures"
-
-  labels = {
-    project = "data-engineering"
-  }
+  labels = var.default_label
 
   schema = <<EOF
 [
@@ -61,10 +56,7 @@ EOF
 resource "google_bigquery_table" "energy" {
   dataset_id = google_bigquery_dataset.temperature_energy_dataset.dataset_id
   table_id   = "energy"
-
-  labels = {
-    project = "data-engineering"
-  }
+  labels = var.default_label
 
   schema = <<EOF
 [
