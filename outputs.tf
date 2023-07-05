@@ -15,5 +15,5 @@ output "data_flow_bucket" {
 }
 
 output "dataset_name" {
-    value = module.bigquery.temperature_energy_dataset_friendly_name
+  value = module.bigquery.temperature_energy_dataset_friendly_name
 }

@@ -1,6 +1,6 @@
 #---------bigquery/bigquery.tf-----------
 
-# Creating a Data Set for the 2 different tables:
+# Data Set for the 2 different tables:
 
 resource "google_bigquery_dataset" "temperature_energy_dataset" {
     dataset_id = "temperature_energy"
@@ -53,6 +53,40 @@ resource "google_bigquery_table" "temperatures" {
     "mode": "NULLABLE",
     "description": "The measurement station's longitude"
   }
+]
+EOF
+
+}
+
+resource "google_bigquery_table" "energy" {
+  dataset_id = google_bigquery_dataset.temperature_energy_dataset.dataset_id
+  table_id   = "energy"
+
+  labels = {
+    project = "data-engineering"
+  }
+
+  schema = <<EOF
+[
+  {
+    "name": "location",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Region where the energy consumption was measured"
+  },
+  {
+    "name": "fuel_type",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The type of fuel consumed"
+  },
+  {
+    "name": "cons_level",
+    "type": "FLOAT",
+    "mode": "NULLABLE",
+    "description": "The consumption level"
+  }
+  
 ]
 EOF
 
