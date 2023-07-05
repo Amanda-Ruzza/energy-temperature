@@ -18,7 +18,7 @@ resource "google_bigquery_table" "temperatures" {
   table_id   = "temperatures"
 
   labels = {
-    env = "data-engineering"
+    project = "data-engineering"
   }
 
   schema = <<EOF

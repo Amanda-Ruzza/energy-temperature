@@ -1,6 +1,5 @@
-#---------root/local.tf-----------
-
-#create a default label for all the resources here
+#---------root/locals.tf-----------
+#default label for all resources 
 locals {
   default_label = {
     project = "data-engineering"
