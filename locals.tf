@@ -3,5 +3,7 @@
 locals {
   default_label = {
     project = "data-engineering"
+    assignement = "temperature-energy"
+    environment = "development"
   }
 }
