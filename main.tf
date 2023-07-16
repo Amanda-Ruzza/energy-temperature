@@ -20,5 +20,5 @@ module "buckets" {
 
 module "bigquery" {
   source        = "./bigquery"
-  default_label = local.default_label 
+  default_label = local.default_label
 }

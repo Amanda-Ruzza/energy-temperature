@@ -84,6 +84,41 @@ EOF
 
 }
 
+resource "google_bigquery_table" "joined_data" {
+  dataset_id = google_bigquery_dataset.temperature_energy_dataset.dataset_id
+  table_id   = "joined_data"
+  labels = var.default_label
+
+  schema = <<EOF
+[
+  {
+    "name": "location",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The USA location"
+  },
+  {
+    "name": "average_temperature",
+    "type": "FLOAT",
+    "mode": "NULLABLE",
+    "description": "The average temperature's calculation"
+  },
+  {
+    "name": "fuel_type",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The type of fuel consumed"
+  },
+  {
+    "name": "cons_level",
+    "type": "FLOAT",
+    "mode": "NULLABLE",
+    "description": "The consumption level"
+  }
+]
+EOF
+}
+
 output "temperature_energy_dataset_friendly_name" {
   value = google_bigquery_dataset.temperature_energy_dataset.friendly_name
 }
