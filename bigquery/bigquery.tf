@@ -15,12 +15,13 @@ resource "google_bigquery_table" "temperatures" {
   dataset_id = google_bigquery_dataset.temperature_energy_dataset.dataset_id
   table_id   = "temperatures"
   labels = var.default_label
+  deletion_protection=false
 
   schema = <<EOF
 [
   {
     "name": "month",
-    "type": "STRING",
+    "type": "DATE",
     "mode": "NULLABLE",
     "description": "Month of the Year"
   },
@@ -56,6 +57,8 @@ EOF
 resource "google_bigquery_table" "energy" {
   dataset_id = google_bigquery_dataset.temperature_energy_dataset.dataset_id
   table_id   = "energy"
+  deletion_protection=false
+
   labels = var.default_label
 
   schema = <<EOF
@@ -87,6 +90,8 @@ EOF
 resource "google_bigquery_table" "joined_data" {
   dataset_id = google_bigquery_dataset.temperature_energy_dataset.dataset_id
   table_id   = "joined_data"
+  deletion_protection=false
+
   labels = var.default_label
 
   schema = <<EOF
