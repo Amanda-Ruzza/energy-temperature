@@ -66,22 +66,13 @@ def parse_raw_csv(input_file_name, output_file_name):
             measurement_flag.append(row[4])
             quality_flag.append(row[5])
             # source_flag.append(row[6]) # is the source flag for the first day of the month - I don't need this original column
-            # obs_time.append(int(row[7])) - I don't need this original column
 
-   # Perform desired transformations on the lists (e.g., lambda functions)
+   # Column transformations:
+    station_id = list(filter(lambda usa: 'US' in usa, station_id))
 
-    # Print the transformed lists
-    print("string_field_0:", station_id)
-    # print("int64_field_1:", int64_field_1)
-    # print("string_field_2:", string_field_2)
-    # print("int64_field_3:", int64_field_3)
-    # print("string_field_4:", string_field_4)
-    # print("string_field_5:", string_field_5)
-    # print("string_field_6:", string_field_6)
-    # print("int64_field_7:", int64_field_7)
     with open(output_file_name, 'w', newline='') as outfile:
         csv_writer = csv.writer(outfile)
-        # Outfile headers:
+        # Outfile headers: #Don't need headers for BigQuery
         # csv.writer.writerow(["station_id", "date", "wx_elm", "wx_elm_dt_val", "mmt_flag", "q_flag"])
         for i in range(len(station_id)):
             csv_writer.writerow([station_id[i],date[1]])
