@@ -7,7 +7,8 @@ from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-# This the function where we want to entry the script
+
+# Function for CLI arguments/script execution
 """
 To execute this script, input this on the CLI from the current directory where the script is located:
     python temperature-transform.py -i <input_file.csv> -o <output_file.csv>
