@@ -39,9 +39,9 @@ def main(argv):
            outputfile = os.path.join(os.path.dirname(script_directory), "raw-files", arg)
        
 
-    logger.info('Input file is: ' + str(inputfile))
+    logger.info('Input file is:\n' + str(inputfile))
     parse_raw_csv(inputfile, outputfile)
-    logger.info('Output file is: ' + str(outputfile))
+    logger.info('Output file is:\n' + str(outputfile))
 
 def parse_raw_csv(input_file_name, output_file_name):
     # Initialize empty lists for each column
@@ -52,7 +52,6 @@ def parse_raw_csv(input_file_name, output_file_name):
     measurement_flag = [] # string type
     quality_flag = [] # string type
     source_flag = [] # string type
-    obs_time = [] #integer:  4-character time of observation in hour-minute format (i.e. 0700 =7:00 am)
 
 
     with open(input_file_name, 'r') as infile:
@@ -60,23 +59,27 @@ def parse_raw_csv(input_file_name, output_file_name):
         next(csv_reader)
         for row in csv_reader:
             # Append each value to the respective column list
-            station_id.append(row[0])
-            date.append(int(row[1]))
-            weather_element.append(row[2])
-            weather_el_data_val.append(int(row[3]))
-            measurement_flag.append(row[4])
-            quality_flag.append(row[5])
+            if 'US' in row[0]:
+                station_id.append(row[0])
+                date.append(int(row[1]))
+                weather_element.append(row[2])
+                weather_el_data_val.append(int(row[3]))
+                measurement_flag.append(row[4])
+                quality_flag.append(row[5])
             # source_flag.append(row[6]) # is the source flag for the first day of the month - I don't need this original column
-
+        print(date)
    # Column transformations:
-    station_id = list(filter(lambda usa: 'US' in usa, station_id))
+    # Covert dates from int to the YYYY-MM-DD format
+    fmt_dates = list(map(lambda d_int: datetime.strptime(str(d_int), "%Y%m%d").strftime("%Y-%m-%d"), date))
+    
 
+    logger.info('Converted the raw integer dates into "YYYY-MM-DD" for BigQuery \n')
     with open(output_file_name, 'w', newline='') as outfile:
         csv_writer = csv.writer(outfile)
         # Outfile headers: #Don't need headers for BigQuery
         # csv.writer.writerow(["station_id", "date", "wx_elm", "wx_elm_dt_val", "mmt_flag", "q_flag"])
         for i in range(len(station_id)):
-            csv_writer.writerow([station_id[i],date[1]])
+            csv_writer.writerow([station_id[i],fmt_dates[i]])
 
 
 
