@@ -78,8 +78,7 @@ def parse_raw_csv(input_file_name, output_file_name):
             csv_writer.writerow([station_id[i],date[1]])
 
 
-def get_usa_stations():
-    pass
+
 
 def convert_dates():
     pass
