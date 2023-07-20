@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 # Function for CLI arguments/script execution
 """
 To execute this script, input this on the CLI from the current directory where the script is located:
-    python temperature-transform.py -i <input_file.csv> -t <input_file.csv> -o <output_file.csv>
+    python temperature-transform.py -i <input_raw_file.csv> -t <input_raw_file.txt> -o <output_file.csv>
 """
 def main(argv):
     inputfile_csv = ''
