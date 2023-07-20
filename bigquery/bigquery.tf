@@ -20,6 +20,36 @@ resource "google_bigquery_table" "temperatures" {
   schema = <<EOF
 [
   {
+    "name": "station_id",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The measurement station's code"
+  },
+  {
+    "name": "station_name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The measurement station's location name"
+  },
+  {
+    "name": "station_state",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The measurement station's US State location"
+  },
+  {
+    "name": "latitude",
+    "type": "GEOGRAPHY",
+    "mode": "NULLABLE",
+    "description": "The measurement station's latitude"
+  },
+  {
+    "name": "longitude",
+    "type": "GEOGRAPHY",
+    "mode": "NULLABLE",
+    "description": "The measurement station's longitude"
+  },
+  {
     "name": "month",
     "type": "DATE",
     "mode": "NULLABLE",
@@ -32,23 +62,18 @@ resource "google_bigquery_table" "temperatures" {
     "description": "The average temperature's calculation"
   },
   {
-    "name": "station_code",
+    "name": "measurement_flag",
     "type": "STRING",
     "mode": "NULLABLE",
-    "description": "The measurement station's code"
-  },
+    "description": "The measurement flag, such as 'precipitation total'"
+  },  
   {
-    "name": "latitude",
-    "type": "FLOAT",
+    "name": "quality_flag",
+    "type": "STRING",
     "mode": "NULLABLE",
-    "description": "The measurement station's latitude"
-  },
-  {
-    "name": "longitude",
-    "type": "FLOAT",
-    "mode": "NULLABLE",
-    "description": "The measurement station's longitude"
+    "description": "The quality flag, such as 'temperature too warm for snow'"
   }
+  
 ]
 EOF
 
