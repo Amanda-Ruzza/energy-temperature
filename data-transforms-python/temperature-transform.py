@@ -62,6 +62,8 @@ def parse_raw_csv(inputfile_csv):
     measurement_flag = [] # string type
     quality_flag = [] # string type
     source_flag = [] # string type
+    # Convert empty strings to 'None'/'null' for BigQuery:
+    convert_to_null = lambda val: None if val == '' else val
 
     with open(inputfile_csv, 'r') as infile:
         csv_reader = csv.reader(infile)
@@ -73,8 +75,8 @@ def parse_raw_csv(inputfile_csv):
                 date.append(int(row[1]))
                 weather_element.append(row[2])
                 weather_el_data_val.append(int(row[3]))
-                measurement_flag.append(row[4])
-                quality_flag.append(row[5])
+                measurement_flag.append(convert_to_null(row[4]))
+                quality_flag.append(convert_to_null(row[5]))
             # source_flag.append(row[6]) # is the source flag for the first day of the month - I don't need this original column
         
     # Column transformations:
@@ -114,6 +116,10 @@ def write_to_output_csv(output_file_csv, fmt_dates, csv_station_id, txt_state, t
         logger.debug(f'Length of measurement_flag: {len(measurement_flag)}')
         logger.debug(f'Length of quality_flag: {len(quality_flag)}')
 
+        # Convert None values to 'null' for BigQuery
+        measurement_flag = ['null' if val is None else val for val in measurement_flag]
+        quality_flag = ['null' if val is None else val for val in quality_flag]
+
         with open(output_file_csv, 'w', newline='') as outfile:
             csv_writer = csv.writer(outfile)
 
@@ -124,20 +130,6 @@ def write_to_output_csv(output_file_csv, fmt_dates, csv_station_id, txt_state, t
         logger.info('Writing to the output CSV file completed.')
     except Exception as e:
         logger.error(f'Error occurred during writing to the output CSV file: {e}')
-
-
-# def write_to_output_csv(output_file_csv, fmt_dates, csv_station_id, txt_state, txt_station_name, txt_latitude, txt_longitude, weather_element, weather_el_data_val, measurement_flag, quality_flag ):
-#     # US station ID's from the raw CSV file
-#     # us_station_ids = [i for i, station_id in enumerate(csv_station_id) if 'US' in station_id]
-#     # print(f"These are the 'US Station Id's from the raw csv file:\n {us_station_ids}")
-#     with open(outputfile_csv, 'w', newline='') as outfile:
-#         csv_writer = csv.writer(outfile)
-        
-#         # # Outfile headers: #Don't need headers for BigQuery
-#         # # csv.writer.writerow(["csv_station_id", "date", "wx_elm", "wx_elm_dt_val", "mmt_flag", "q_flag"])
-#         for i in range(len(csv_station_id)):
-#             csv_writer.writerow([csv_station_id[i],fmt_dates[i], measurement_flag[i], quality_flag[i]])
-
 
 
 if __name__ == '__main__':
