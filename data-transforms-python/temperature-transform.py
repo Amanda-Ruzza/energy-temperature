@@ -39,11 +39,11 @@ def main(argv):
             
     logger.info('Input CSV file is:\n' + str(inputfile_csv))
     logger.info('Input TXT file is:\n' + str(inputfile_txt))
-    csv_station_id, fmt_dates, weather_element, weather_element_data_val, measurement_flag, quality_flag = parse_raw_csv(inputfile_csv)
+    csv_station_id, fmt_dates, weather_element, weather_element_data_val, measurement_flag, quality_flag = parse_temperatures(inputfile_csv)
     
     # Check if the inputfile_txt exists before parsing it
     if os.path.exists(inputfile_txt):
-        txt_state, txt_station_name, txt_latitude, txt_longitude, txt_elevation, txt_station_id = parse_raw_txt(inputfile_txt)
+        txt_state, txt_station_name, txt_latitude, txt_longitude, txt_elevation, txt_station_id = parse_stations(inputfile_txt)
     else:
         print(f"File {inputfile_txt} not found. Skipping TXT file parsing.")
         txt_state, txt_station_name, txt_latitude, txt_longitude, txt_elevation, txt_station_id = [], [], [], [], [], []
@@ -53,7 +53,7 @@ def main(argv):
     return
 
     # CSV Parsing:
-def parse_raw_csv(inputfile_csv):
+def parse_temperatures(inputfile_csv):
     # Initialize empty lists for each column in the CSV file:
     csv_station_id = [] # string type
     date = [] #integer type
@@ -87,9 +87,9 @@ def parse_raw_csv(inputfile_csv):
     return csv_station_id, fmt_dates, weather_element, weather_el_data_val, measurement_flag, quality_flag
     
 
-def parse_raw_txt(inputfile_txt):
+def parse_stations(inputfile_txt):
     # Initialize empty lists for each column in the TXT file:
-    txt_station_id = [] # string type
+    station_data = {} # string type
     txt_latitude = [] # float type
     txt_longitude = [] # float type
     txt_elevation = [] # float type [don't need this one on the output file]
@@ -98,14 +98,20 @@ def parse_raw_txt(inputfile_txt):
 
     print(f"Attempting to open and read file: {inputfile_txt}")
     with open(inputfile_txt, 'r') as txtfile:
+        csv_station_reader = csv.DictReader(txtfile, fieldnames=["station_id_st", "latitude", "longitude", "elevation", "state", "station_name" ], delimiter="\t")
         # Count each element per line
-        lines = txtfile.readlines()
-        lines = [line.strip() for line in lines]
-        print(f'These are the lines in the "ghcnd-stations.txt" file:\n {lines[:10]}')
+        for row in csv_station_reader:
+    #         if row.isspace() == True:
+    #             print("Found Spaces in rows")
+    #         station_data[row["station_id_st"]] = row.values() # add the keys for each of the rows
+    # print(station_data.keys())
+    
+            return(station_data)
+    
 
     # TXT data transformations 
 
-    return txt_state, txt_station_name, txt_latitude, txt_longitude, txt_station_id, txt_elevation
+    # return txt_state, txt_station_name, txt_latitude, txt_longitude, station_data, txt_elevation
 
 
 def write_to_output_csv(output_file_csv, fmt_dates, csv_station_id, txt_state, txt_station_name, txt_latitude, txt_longitude, weather_element, weather_el_data_val, measurement_flag, quality_flag):
