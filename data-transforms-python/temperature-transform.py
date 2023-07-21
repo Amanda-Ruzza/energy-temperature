@@ -71,7 +71,7 @@ def parse_raw_csv(inputfile_csv):
         for row in csv_reader:
             # Append each value to the respective column list
             if row[0].startswith('US'):
-                csv_station_id.append(row[0])
+                csv_station_id.append(row[0].upper())
                 date.append(int(row[1]))
                 weather_element.append(row[2])
                 weather_el_data_val.append(int(row[3]))
