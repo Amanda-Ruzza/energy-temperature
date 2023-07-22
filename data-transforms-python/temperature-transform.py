@@ -3,6 +3,7 @@ import logging
 import csv
 import sys, getopt
 import os
+import re
 from datetime import datetime
 
 logging.basicConfig(level=logging.DEBUG)
@@ -89,30 +90,30 @@ def parse_temperatures(inputfile_csv):
 
 def parse_stations(inputfile_txt):
     # Initialize empty lists for each column in the TXT file:
-    station_data = {} # string type
-    txt_latitude = [] # float type
-    txt_longitude = [] # float type
-    txt_elevation = [] # float type [don't need this one on the output file]
-    txt_state = [] # string type
-    txt_station_name = [] # string type
+    station_data = [] # string type // station code from the txt file
+    station_latitude = [] # float type
+    station_longitude = [] # float type
+    station_elevation = [] # float type [don't need this one on the output file]
+    station_state = [] # string type
+    station_name = [] # string type
 
-    print(f"Attempting to open and read file: {inputfile_txt}")
+    print(f"Attempting to open and read the TXT file: {inputfile_txt}")
     with open(inputfile_txt, 'r') as txtfile:
-        csv_station_reader = csv.DictReader(txtfile, fieldnames=["station_id_st", "latitude", "longitude", "elevation", "state", "station_name" ], delimiter="\t")
-        # Count each element per line
-        for row in csv_station_reader:
-    #         if row.isspace() == True:
-    #             print("Found Spaces in rows")
-    #         station_data[row["station_id_st"]] = row.values() # add the keys for each of the rows
-    # print(station_data.keys())
-    
-            return(station_data)
-    
+        for line in txtfile:
+            # Use 'RE' to split the lines whenever a space occurs
+            elements = re.split(r'\s+', line.strip())
+            
+            station_data.append(elements[0])
+            station_latitude.append(float(elements[1]))
+            station_longitude.append(float(elements[2]))
+            station_state.append(elements[-2])
+            station_name.append("".join(elements[3:-2]))
+            
+            print(f"Line with unexpected format: {line.strip()}\n")
 
     # TXT data transformations 
 
-    # return txt_state, txt_station_name, txt_latitude, txt_longitude, station_data, txt_elevation
-
+    return station_data, station_name, station_state, station_latitude, station_longitude, station_elevation
 
 def write_to_output_csv(output_file_csv, fmt_dates, csv_station_id, txt_state, txt_station_name, txt_latitude, txt_longitude, weather_element, weather_el_data_val, measurement_flag, quality_flag):
     try:
