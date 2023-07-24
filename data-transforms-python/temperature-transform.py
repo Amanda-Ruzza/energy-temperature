@@ -100,16 +100,18 @@ def parse_stations(inputfile_txt):
     print(f"Attempting to open and read the TXT file: {inputfile_txt}")
     with open(inputfile_txt, 'r') as txtfile:
         for line in txtfile:
-            # Use 'RE' to split the lines whenever a space occurs
-            elements = re.split(r'\s+', line.strip())
-            
-            station_data.append(elements[0])
-            station_latitude.append(float(elements[1]))
-            station_longitude.append(float(elements[2]))
-            station_state.append(elements[-2])
-            station_name.append("".join(elements[3:-2]))
-            
-            print(f"Line with unexpected format: {line.strip()}\n")
+            # Parsing 'US stations'
+            if line.strip().startswith('US'):
+                # Use 'RE' to split the lines whenever a space occurs
+                elements = re.split(r'\s+', line.strip())
+                
+                station_data.append(elements[0])
+                station_latitude.append(float(elements[1]))
+                station_longitude.append(float(elements[2]))
+                station_state.append(elements[-2])
+                station_name.append("".join(elements[3:-2]))
+            else:
+                print(f"Line with unexpected format: {line.strip()}\n")
 
     # TXT data transformations 
 
