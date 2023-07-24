@@ -48,8 +48,12 @@ def main(argv):
     else:
         print(f"File {inputfile_txt} not found. Skipping TXT file parsing.")
         txt_state, txt_station_name, txt_latitude, txt_longitude, txt_elevation, txt_station_id = [], [], [], [], [], []
-        
-    logger.info('Output file is:\n' + str(outputfile_csv))
+
+    # Call the Match Statation indexing function
+    matched_station_names, matched_station_states = match_stations(csv_station_id, txt_station_id, txt_station_name, txt_state)    
+    logger.debug(f"Matched Station Names:\n {matched_station_names[:5]}")
+    logger.debug(f"Matched Station States:\n {matched_station_states[:5]}")
+    logger.info("Output file is:\n" + str(outputfile_csv))
     write_to_output_csv(outputfile_csv, fmt_dates, csv_station_id, txt_state, txt_station_name, txt_latitude, txt_longitude, weather_element, weather_element_data_val, measurement_flag, quality_flag)  # Call the write_to_output_csv function
     return
 
@@ -98,7 +102,7 @@ def parse_stations(inputfile_txt):
     station_name = [] # string type
 
     print(f"Attempting to open and read the TXT file: {inputfile_txt}")
-    with open(inputfile_txt, 'r') as txtfile:
+    with open(inputfile_txt, 'r', encoding='utf-8') as txtfile:
         for line in txtfile:
             # Parsing 'US stations'
             if line.strip().startswith('US'):
@@ -116,7 +120,29 @@ def parse_stations(inputfile_txt):
     # TXT data transformations 
 
     return station_data, station_name, station_state, station_latitude, station_longitude, station_elevation
+# Match US Station Information between the temperature and station files
+def match_stations(csv_station_id, txt_station_id, txt_station_name, txt_state):
+    matched_station_names = []
+    matched_station_states = []
+# Lambda function for indexing the station ID's between both files
+    find_station_index = lambda station_id: next((i for i, id in enumerate(txt_station_id) if id == station_id), None)
+# Loop through each Station ID in csv_station_id
+    for station_id in csv_station_id:
+        station_index = find_station_index(station_id)
+        if station_index is not None:
+            matched_station_names.append(txt_station_name[station_index])
+            matched_station_states.append(txt_state[station_index])
+        else:
+            matched_station_names.append(None)
+            matched_station_states.append(None)
+ # Add logging statements to check the first few matched stations
+    logger.debug(f"CSV Station IDs: {csv_station_id[:5]}")
+    logger.debug(f"TXT Station IDs: {txt_station_id[:5]}")
+    logger.debug(f"Matched Station Names: {matched_station_names[:5]}")
+    logger.debug(f"Matched Station States: {matched_station_states[:5]}")
 
+    return matched_station_names, matched_station_states
+    
 def write_to_output_csv(output_file_csv, fmt_dates, csv_station_id, txt_state, txt_station_name, txt_latitude, txt_longitude, weather_element, weather_el_data_val, measurement_flag, quality_flag):
     try:
         logger.debug('Writing to the output CSV file.')
