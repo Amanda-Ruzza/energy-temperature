@@ -116,6 +116,13 @@ def parse_stations(inputfile_txt):
                 station_name.append("".join(elements[3:-2]))
             else:
                 print(f"Line with unexpected format: {line.strip()}\n")
+    logger.debug("First 5 elements of the 'Station Data List':\n {station_data[:5]}")
+    logger.debug("First 5 elements of the 'Station Latitude List':\n {station_latitude[:5]}")
+    logger.debug("First 5 elements of the 'Station Longitude List':\n {station_longitude[:5]}")
+    logger.debug("First 5 elements of the 'Station US State List':\n {station_state[:5]}")
+    logger.debug("First 5 elements of the 'Station Name List':\n {station_name[:5]}")
+
+
 
     # TXT data transformations 
 
