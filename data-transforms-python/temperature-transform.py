@@ -106,21 +106,21 @@ def parse_stations(inputfile_txt):
         for line in txtfile:
             # Parsing 'US stations'
             if line.strip().startswith('US'):
-                # Use 'RE' to split the lines whenever a space occurs
-                elements = re.split(r'\s+', line.strip())
-                
-                station_data.append(elements[0])
-                station_latitude.append(float(elements[1]))
-                station_longitude.append(float(elements[2]))
-                station_state.append(elements[-2])
-                station_name.append("".join(elements[3:-2]))
+                # Extracting data using string slicing
+                station_data.append(line[0:11].strip())
+                station_latitude.append(float(line[12:20]))
+                station_longitude.append(float(line[21:30]))
+                station_state.append(line[65:67].strip())
+                station_name.append(line[68:].strip())
+            
             else:
-                print(f"Line with unexpected format: {line.strip()}\n")
-    logger.debug("First 5 elements of the 'Station Data List':\n {station_data[:5]}")
-    logger.debug("First 5 elements of the 'Station Latitude List':\n {station_latitude[:5]}")
-    logger.debug("First 5 elements of the 'Station Longitude List':\n {station_longitude[:5]}")
-    logger.debug("First 5 elements of the 'Station US State List':\n {station_state[:5]}")
-    logger.debug("First 5 elements of the 'Station Name List':\n {station_name[:5]}")
+                # print(f"Line with unexpected format: {line.strip()}\n")
+                continue
+    logger.debug(f"First 10 elements of the 'Station Data List':\n {station_data[:10]}")
+    logger.debug(f"First 10 elements of the 'Station Latitude List':\n {station_latitude[:10]}")
+    logger.debug(f"First 10 elements of the 'Station Longitude List':\n {station_longitude[:10]}")
+    logger.debug(f"First 10 elements of the 'Station US State List':\n {station_state[:10]}")
+    logger.debug(f"First 10 elements of the 'Station Name List':\n {station_name[:10]}")
 
 
 
@@ -150,13 +150,16 @@ def match_stations(csv_station_id, txt_station_id, txt_station_name, txt_state):
 
     return matched_station_names, matched_station_states
     
-def write_to_output_csv(output_file_csv, fmt_dates, csv_station_id, txt_state, txt_station_name, txt_latitude, txt_longitude, weather_element, weather_el_data_val, measurement_flag, quality_flag):
+def write_to_output_csv(output_file_csv, fmt_dates, csv_station_id, station_data, station_name, station_latitude, station_longitude, weather_element, weather_el_data_val, measurement_flag, quality_flag):
     try:
         logger.debug('Writing to the output CSV file.')
         logger.debug(f'Length of csv_station_id: {len(csv_station_id)}')
         logger.debug(f'Length of fmt_dates: {len(fmt_dates)}')
         logger.debug(f'Length of measurement_flag: {len(measurement_flag)}')
         logger.debug(f'Length of quality_flag: {len(quality_flag)}')
+        logger.debug(f'Length of station_data: {len(station_data)}')
+        logger.debug(f'Length of station_latitude: {len(station_latitude)}')
+
 
         # Convert None values to 'null' for BigQuery
         measurement_flag = ['null' if val is None else val for val in measurement_flag]
